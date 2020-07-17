@@ -1,0 +1,245 @@
+# Creating 12 Person nodes
+CREATE (Ben:Person{name:'Benjamin Teo',born:1998,location:'Choa Chu Kang'})
+CREATE(Tom:Person{name:'Tom Cruise', born:1958, location:'Sengkang'})
+CREATE(Sam:Person{name:'Sam Tan', born:1980,location:'Choa Chu Kang'})
+CREATE(Aaron:Person{name:'Aaron Choo',born:1970,location:'Punggol'})
+CREATE(Gerald:Person{name:'Gerald Goh',born:1988,location:'Punggol'})
+CREATE(James:Person{name:'James Ho', born:1999,location:'Sengkang'})
+CREATE(Fred:Person{name:'Fred Ow',born:1997,location:'Choa Chu Kang'})
+CREATE(Rachel:Person{name:'Rachel Tan', born:1988, location:'Punggol'})
+CREATE(Venice:Person{name:'Venice Foo', born:1998, location:'Sengkang'})
+CREATE(Cally:Person{name:'Cally Goh', born:1980, location: 'Choa Chu Kang'})
+CREATE(Henderson:Person{name:'Henderson Holland', born:1995, location:'Punggol'})
+CREATE(Kenneth:Person{name:'Kenneth Riddle',born:'1977',location:'Sengkang'})
+
+# Creating 20 Article nodes
+CREATE(Article1:Article{name:'Article1',location:'Punggol',year:2016})
+CREATE(Article2:Article{name:'Article2',location:'Sengkang',year:2017})
+CREATE(Article3:Article{name:'Article3', location:'Choa Chu Kang', year:2010})
+CREATE(Article4:Article{name: 'Article4', location: 'Sengkang', year: 2015})
+CREATE(Article5:Article{name:'Article5',location:'Punggol', year:2018})
+CREATE(Article6:Article{name:'Article6',location:'Sengkang', year:2015})
+CREATE(Article7:Article{name:'Article7', location:'Choa Chu Kang', year:2008})
+CREATE(Article8:Article{name:'Article8',location:'Choa Chu Kang', year: 2019})
+CREATE(Article9:Article{name:'Article9',location:'Punggol',year:2008})
+CREATE(Article10:Article{name:'Article10',location:'Sengkang',year:2020})
+CREATE(Article11:Article{name:'Article11',location:'Sengkang',year:2010})
+CREATE(Article12:Article{name:'Article12',location:'Punggol', year:2016})
+CREATE(Article13:Article{name:'Article13',location:'Choa Chu Kang', year: 2018})
+CREATE(Article14:Article{name:'Article14',location:'Punggol',year:2014})
+CREATE(Article15:Article{name:'Article15',location:'Punggol',year:2011})
+CREATE(Article16:Article{name:'Article16',location:'Sengkang',year:2017})
+CREATE(Article17:Article{name:'Article17',location:'Choa Chu Kang', year:2020})
+CREATE(Article18:Article{name:"Article18",location:'Choa Chu Kang', year: 2016})
+CREATE(Article19:Article{name: 'Article19', location: 'Choa Chua Kang', year:2011})
+CREATE(Article20:Article{name: 'Article20', location: 'Sengkang', year:2018})
+
+# Creating the relationships
+MATCH (ben:Person {name:"Benjamin Teo"}), (article3:Article{name:"Article3"}), (article7:Article{name:"Article7"})
+CREATE (ben)-[:LIKED{timestamp:2019}]->(article3)
+CREATE (ben)-[:LIKED{timestamp:2010}]->(article7)
+
+MATCH (tom:Person {name: "Tom Cruise"}), (article10:Article{name:"Article10"}), (article2:Article{name:"Article2"}), (article13:Article{name:"Article13"})
+CREATE (tom)-[:LIKED{timestamp:2020}]->(article10)
+CREATE (tom)-[:LIKED{timestamp:2019}]->(article2)
+CREATE (tom)-[:LIKED{timestamp:2020}]->(article13)
+
+MATCH (sam:Person {name:"Sam Tan"}), (article7:Article{name:"Article7"}),(article8:Article{name:"Article8"}),(article17:Article{name:"Article17"})
+CREATE (sam)-[:LIKED{timestamp:2010}]->(article7)
+CREATE (sam)-[:LIKED{timestamp:2019}]->(article8)
+CREATE (sam)-[:LIKED{timestamp:2020}]->(article17)
+
+MATCH (aaron:Person {name:"Aaron Choo"}), (article1:Article{name:"Article1"}),(article5:Article{name:"Article5"}),(article9:Article{name:"Article9"})
+CREATE (aaron)-[:LIKED{timestamp:2017}]->(article1)
+CREATE (aaron)-[:LIKED{timestamp:2019}]->(article5)
+CREATE (aaron)-[:LIKED{timestamp:2008}]->(article9)
+
+MATCH (ger:Person {name:"Gerald Goh"}), (article14:Article{name:"Article14"}),(article15:Article{name:"Article15"}),(article9:Article{name:"Article9"})
+CREATE (ger)-[:LIKED{timestamp:2017}]->(article14)
+CREATE (ger)-[:LIKED{timestamp:2012}]->(article15)
+CREATE (ger)-[:LIKED{timestamp:2009}]->(article9)
+
+MATCH (james:Person {name:"James Ho"}), (article2:Article{name:"Article2"}),(article10:Article{name:"Article10"}),(article11:Article{name:"Article11"}),
+(article16:Article{name:"Article16"})
+CREATE (james)-[:LIKED{timestamp:2017}]->(article2)
+CREATE (james)-[:LIKED{timestamp:2020}]->(article10)
+CREATE (james)-[:LIKED{timestamp:2015}]->(article11)
+CREATE (james)-[:LIKED{timestamp:2018}]->(article16)
+
+MATCH (fred:Person {name:"Fred Ow"}), (article7:Article{name:"Article7"}),(article8:Article{name:"Article8"}),(article17:Article{name:"Article17"}),
+(article18:Article{name:"Article18"})
+CREATE (fred)-[:LIKED{timestamp:2010}]->(article7)
+CREATE (fred)-[:LIKED{timestamp:2019}]->(article8)
+CREATE (fred)-[:LIKED{timestamp:2020}]->(article17)
+CREATE (fred)-[:LIKED{timestamp:2018}]->(article18)
+
+MATCH (rach:Person {name:"Rachel Tan"}), (article9:Article{name:"Article9"}),(article12:Article{name:"Article12"}),(article5:Article{name:"Article5"}),
+(article15:Article{name:"Article15"})
+CREATE (rach)-[:LIKED{timestamp:2010}]->(article9)
+CREATE (rach)-[:LIKED{timestamp:2019}]->(article12)
+CREATE (rach)-[:LIKED{timestamp:2019}]->(article5)
+CREATE (rach)-[:LIKED{timestamp:2014}]->(article15)
+
+MATCH (ven:Person {name:"Venice Foo"}), (article20:Article{name:"Article20"}),(article4:Article{name:"Article4"}),(article6:Article{name:"Article6"}),
+(article19:Article{name:"Article19"})
+CREATE (ven)-[:LIKED{timestamp:2012}]->(article19)
+CREATE (ven)-[:LIKED{timestamp:2019}]->(article20)
+CREATE (ven)-[:LIKED{timestamp:2016}]->(article4)
+CREATE (ven)-[:LIKED{timestamp:2015}]->(article6)
+
+MATCH (cal:Person {name:"Cally Goh"}), (article20:Article{name:"Article20"}),(article19:Article{name:"Article19"}),(article3:Article{name:"Article3"}),
+(article8:Article{name:"Article8"})
+CREATE (cal)-[:LIKED{timestamp:2012}]->(article19)
+CREATE (cal)-[:LIKED{timestamp:2019}]->(article20)
+CREATE (cal)-[:LIKED{timestamp:2010}]->(article3)
+CREATE (cal)-[:LIKED{timestamp:2019}]->(article8)
+
+MATCH (hen:Person {name:"Henderson Holland"}), (article1:Article{name:"Article1"}),(article5:Article{name:"Article5"}),(article12:Article{name:"Article12"}),
+(article2:Article{name:"Article2"})
+CREATE (hen)-[:LIKED{timestamp:2017}]->(article1)
+CREATE (hen)-[:LIKED{timestamp:2019}]->(article5)
+CREATE (hen)-[:LIKED{timestamp:2016}]->(article12)
+CREATE (hen)-[:LIKED{timestamp:2017}]->(article2)
+
+MATCH (ken:Person {name:"Kenneth Riddle"}), (article6:Article{name:"Article6"}),(article10:Article{name:"Article10"}),(article7:Article{name:"Article7"}),
+(article11:Article{name:"Article11"})
+CREATE (ken)-[:LIKED{timestamp:2016}]->(article6)
+CREATE (ken)-[:LIKED{timestamp:2020}]->(article10)
+CREATE (ken)-[:LIKED{timestamp:2010}]->(article7)
+CREATE (ken)-[:LIKED{timestamp:2010}]->(article11)
+
+# To see the whole graph!
+MATCH (people:Person), (articles:Article) return people,articles
+
+# Recommend Tom Cruise an article based on articles that he liked
+# Find out what other articles did the users who liked the articles that Tom Cruise liked also liked
+# Ensure that Tom Cruise has not yet liked these articles
+# Count the frequency of these articles liked by the users supposedly similar to Tom Cruise (since they liked the same article before)
+# Output the list of articles sorted by descending frequency 
+# Articles 11 and 16 are top in the list. The articles were also from the same location as Tom Cruise was in, Sengkang.
+MATCH (tom:Person {name:"Tom Cruise"})-[:LIKED]->(a)<-[:LIKED]-(others), (others)-[:LIKED]->(a2)
+WHERE NOT (tom)-[:LIKED]->(a2)
+RETURN a2.name AS Recommended, count(*) AS Frequency ORDER BY Frequency DESC
+
+# Recommend Tom Cruise an article based on his user profile!
+# Can be improved because not every user is similar to the same degree to Tom Cruise. Some people may be more similar to Tom Cruise's profile!
+# Can recommend Tom Cruise the articles that users who are most similar to him in terms of profile liked (and that he hasn't)
+# Based on profile = based on articles liked, location and age
+
+# Create graph in GDS
+# Using native projection
+CALL gds.graph.create('testing-graph',['Person','Article'],'LIKED') YIELD graphName, nodeCount, relationshipCount, createMillis
+
+# Using a Cypher projection
+CALL gds.graph.create.cypher('testing-graph-1', 'MATCH(n) WHERE n:Person or n:Article or n:Location RETURN id(n) as id', 'MATCH (s:Person)-[:LOCATED|:LIKED]->(t) RETURN id(s) as source, id(t) as target') YIELD graphName, nodeCount, relationshipCount, createMillis
+
+# Find users who are similar -- based on only articles liked
+CALL gds.nodeSimilarity.stream('testing-graph')
+YIELD node1, node2, similarity
+RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name as Person2, similarity
+# Getting the similarity scores results in table form
+
+# Write the relationships + the similarity scores as properties of the relationships
+CALL gds.nodeSimilarity.write('testing-graph', {writeRelationshipType: 'SIMILAR', writeProperty: 'score'}) YIELD nodesCompared, relationshipsWritten
+
+# To compare nodes based on features like locations, need to add them as nodes + relationships
+# For age, the weight of the relationship can be set to the numeric age to preserve the relativity / categorise the ages into bins (e.g. in bins of 10 years)
+# To calculate similarity score based on multiple relationship types: https://community.neo4j.com/t/how-to-find-the-similarity-between-common-nodes-of-multiple-type-nodes/14321/6
+
+# For now, continuing with current similarity scores, recommend an article to Tom Cruise.
+
+# Find most similar user and recommend the article(s) that this user liked but Tom Cruise has not liked. 
+# In this case here, James Ho is the most similar to Tom Cruise in terms of articles liked, with a similarity score of 0.4.
+MATCH (tom:Person{name:"Tom Cruise"})-[r:SIMILAR]->(p)
+WITH tom,p,r
+ORDER BY r.score DESC LIMIT 1
+MATCH (p)-[r2:LIKED]->(a2) WHERE NOT (tom)-[:LIKED]->(a2)
+RETURN a2, r.score
+# Articles 11 and 16 are returned. 
+# To return n number of articles, LIMIT n
+# Return collect(a2) instead to return a single list of the articles. 
+
+# Recommendation engine including location (to calculate node similarity)
+# Creating Location nodes
+CREATE (Choa:Location{name:'Choa Chu Kang'})
+CREATE (Pun:Location{name:'Punggol'})
+CREATE (Sen:Location{name:'Sengkang'})
+
+# Creating relationships between Person nodes and Location nodes
+MATCH (ben:Person {name:"Benjamin Teo"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (ben)-[:LOCATED]->(choa)
+
+MATCH (tom:Person {name: "Tom Cruise"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (tom)-[:LOCATED]->(sen)
+
+MATCH (sam:Person {name:"Sam Tan"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (sam)-[:LOCATED]->(choa)
+
+MATCH (aaron:Person {name:"Aaron Choo"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (aaron)-[:LOCATED]->(pun)
+
+MATCH (ger:Person {name:"Gerald Goh"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (ger)-[:LOCATED]->(pun)
+
+MATCH (james:Person {name:"James Ho"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (james)-[:LOCATED]->(sen)
+
+MATCH (fred:Person {name:"Fred Ow"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (fred)-[:LOCATED]->(choa)
+
+MATCH (rach:Person {name:"Rachel Tan"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (rach)-[:LOCATED]->(pun)
+
+MATCH (ven:Person {name:"Venice Foo"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (ven)-[:LOCATED]->(sen)
+
+MATCH (cal:Person {name:"Cally Goh"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (cal)-[:LOCATED]->(choa)
+
+MATCH (hen:Person {name:"Henderson Holland"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (hen)-[:LOCATED]->(pun)
+
+MATCH (ken:Person {name:"Kenneth Riddle"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+CREATE (ken)-[:LOCATED]->(sen)
+
+# Calculate node similarity based on location and articles liked
+CALL gds.nodeSimilarity.stream('testing-graph-1')
+YIELD node1, node2, similarity
+RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name as Person2, similarity
+# Uses the same formula. 
+
+# Write the relationships + the similarity scores as properties of the relationships
+CALL gds.nodeSimilarity.write('testing-graph-1', {writeRelationshipType: 'SIMILAR-1', writeProperty: 'score'}) YIELD nodesCompared, relationshipsWritten
+
+# Find the most similar user and recommend based on the articles that user liked.
+# Liked relationships can also be weighted - will affect the similarity score.  
+MATCH (tom:Person{name:"Tom Cruise"})-[r:`SIMILAR-1`]->(p)
+WITH tom,p,r
+ORDER BY r.score DESC LIMIT 1
+MATCH (p)-[r2:LIKED]->(a2) WHERE NOT (tom)-[:LIKED]->(a2)
+RETURN a2, r.score
+
+# Queries from last sesh:
+# Entity as nodes? e.g. Location, what they viewed, what they liked, what they created --> yes, makes sense + relationships
+# How should we combine results from different recommendations? e.g. article recommendations from different neighbours --> can weigh these recommendations with similarity score
+# To conclude which article to recommend to the user in this case, can use sum or mean of these similarity scores and compare --> open to discussion
+
+# Say we don't want to find the most similar user, instead we want to look at all the users similar to Tom Cruise and weigh the recommendations by the similarity scores.
+# Say we take mean of the scores to determine the final article to recommend. 
+MATCH (tom:Person{name:"Tom Cruise"})-[r:`SIMILAR-1`]->(p)
+WITH tom,p,r
+MATCH (p)-[r2:LIKED]->(a2) WHERE NOT (tom)-[:LIKED]->(a2)
+RETURN a2 AS Article, avg(r.score) AS AverageScore ORDER BY AverageScore DESC
+
+# Try the weighted graph
+# Create a graph using Cypher projection
+CALL gds.graph.create.cypher('testing-graph-2', 'MATCH(n) WHERE n:Person OR n:Article OR n:Location RETURN id(n) AS id', 'MATCH (s:Person)-[r:LIKED|LOCATED]->(t) RETURN id(s) AS source, id(t) AS target, coalesce(r.timestamp, 1.0) AS timestamp') YIELD graphName, nodeCount, relationshipCount, createMillis
+
+CALL gds.nodeSimilarity.stream('testing-graph-2', { relationshipWeightProperty: 'timestamp' })
+YIELD node1, node2, similarity
+RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name AS Person2, similarity
+
+# This used the timestamp as the relationship weight property.
+
+
+
