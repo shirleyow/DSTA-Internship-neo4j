@@ -130,9 +130,6 @@ RETURN a2.name AS Recommended, count(*) AS Frequency ORDER BY Frequency DESC
 # Using native projection
 CALL gds.graph.create('testing-graph',['Person','Article'],'LIKED') YIELD graphName, nodeCount, relationshipCount, createMillis
 
-# Using a Cypher projection
-CALL gds.graph.create.cypher('testing-graph-1', 'MATCH(n) WHERE n:Person or n:Article or n:Location RETURN id(n) as id', 'MATCH (s:Person)-[:LOCATED|:LIKED]->(t) RETURN id(s) as source, id(t) as target') YIELD graphName, nodeCount, relationshipCount, createMillis
-
 # Find users who are similar -- based on only articles liked
 CALL gds.nodeSimilarity.stream('testing-graph')
 YIELD node1, node2, similarity
@@ -202,11 +199,14 @@ CREATE (hen)-[:LOCATED]->(pun)
 MATCH (ken:Person {name:"Kenneth Riddle"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (ken)-[:LOCATED]->(sen)
 
+# Create graph using a Cypher projection
+CALL gds.graph.create.cypher('testing-graph-1', 'MATCH(n) WHERE n:Person or n:Article or n:Location RETURN id(n) as id', 'MATCH (s:Person)-[:LOCATED|:LIKED]->(t) RETURN id(s) as source, id(t) as target') YIELD graphName, nodeCount, relationshipCount, createMillis
+
 # Calculate node similarity based on location and articles liked
 CALL gds.nodeSimilarity.stream('testing-graph-1')
 YIELD node1, node2, similarity
 RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name as Person2, similarity
-# Uses the same formula. 
+# Uses the same Jaccard Similarity formula. 
 
 # Write the relationships + the similarity scores as properties of the relationships
 CALL gds.nodeSimilarity.write('testing-graph-1', {writeRelationshipType: 'SIMILAR-1', writeProperty: 'score'}) YIELD nodesCompared, relationshipsWritten
@@ -233,13 +233,11 @@ RETURN a2 AS Article, avg(r.score) AS AverageScore ORDER BY AverageScore DESC
 
 # Try the weighted graph
 # Create a graph using Cypher projection
+# coalesce gives r.timestamp a default value of 1.0 instead of null (if the timestamp property is not present in relationship r)
 CALL gds.graph.create.cypher('testing-graph-2', 'MATCH(n) WHERE n:Person OR n:Article OR n:Location RETURN id(n) AS id', 'MATCH (s:Person)-[r:LIKED|LOCATED]->(t) RETURN id(s) AS source, id(t) AS target, coalesce(r.timestamp, 1.0) AS timestamp') YIELD graphName, nodeCount, relationshipCount, createMillis
 
+# Determines node similarity based on the timestamp property
+# If 2 users liked the article in a similar time frame, they will be considered more similar 
 CALL gds.nodeSimilarity.stream('testing-graph-2', { relationshipWeightProperty: 'timestamp' })
 YIELD node1, node2, similarity
 RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name AS Person2, similarity
-
-# This used the timestamp as the relationship weight property.
-
-
-
