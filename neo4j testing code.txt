@@ -231,13 +231,20 @@ WITH tom,p,r
 MATCH (p)-[r2:LIKED]->(a2) WHERE NOT (tom)-[:LIKED]->(a2)
 RETURN a2 AS Article, avg(r.score) AS AverageScore ORDER BY AverageScore DESC
 
+# Recommend articles liked more recently
+# Order by average timestamp as well
+MATCH (tom:Person{name:"Tom Cruise"})-[r:`SIMILAR-1`]->(p)
+WITH tom,p,r
+MATCH (p)-[r2:LIKED]->(a2) WHERE NOT (tom)-[:LIKED]->(a2)
+RETURN a2 AS Article, avg(r.score) AS AverageScore, avg(r2.timestamp) AS AverageTime ORDER BY AverageScore, AverageTime DESC
+
 # Try the weighted graph
-# Create a graph using Cypher projection
+# Create a graph using Cypher projection with relationship property included this time
 # coalesce gives r.timestamp a default value of 1.0 instead of null (if the timestamp property is not present in relationship r)
 CALL gds.graph.create.cypher('testing-graph-2', 'MATCH(n) WHERE n:Person OR n:Article OR n:Location RETURN id(n) AS id', 'MATCH (s:Person)-[r:LIKED|LOCATED]->(t) RETURN id(s) AS source, id(t) AS target, coalesce(r.timestamp, 1.0) AS timestamp') YIELD graphName, nodeCount, relationshipCount, createMillis
 
-# Determines node similarity based on the timestamp property
-# If 2 users liked the article in a similar time frame, they will be considered more similar 
+# Determines node similarity based on location, articles liked and the timestamp property of the LIKED relationships
+# If 2 users liked the article in a similar time frame, they will be considered more similar than users who liked the article in different years (smaller the diff in years, greater the similarity)
 CALL gds.nodeSimilarity.stream('testing-graph-2', { relationshipWeightProperty: 'timestamp' })
 YIELD node1, node2, similarity
 RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name AS Person2, similarity
