@@ -108,9 +108,6 @@ CREATE (ken)-[:LIKED{timestamp:2020}]->(article10)
 CREATE (ken)-[:LIKED{timestamp:2010}]->(article7)
 CREATE (ken)-[:LIKED{timestamp:2010}]->(article11)
 
-# To see the whole graph!
-MATCH (people:Person), (articles:Article) return people,articles
-
 # Recommend Tom Cruise an article based on articles that he liked
 # Find out what other articles did the users who liked the articles that Tom Cruise liked also liked
 # Ensure that Tom Cruise has not yet liked these articles
