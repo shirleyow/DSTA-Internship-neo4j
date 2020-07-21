@@ -119,7 +119,7 @@ WHERE NOT (tom)-[:LIKED]->(a2)
 RETURN a2.name AS Recommended, count(*) AS Frequency ORDER BY Frequency DESC
 
 # Recommend Tom Cruise an article based on his user profile!
-# Can be improved because not every user is similar to the same degree to Tom Cruise. Some people may be more similar to Tom Cruise's profile!
+# Prev recommendation can be improved because not every user is similar to the same degree to Tom Cruise. Some people may be more similar to Tom Cruise's profile!
 # Can recommend Tom Cruise the articles that users who are most similar to him in terms of profile liked (and that he hasn't)
 # Based on profile = based on articles liked, location and age
 
