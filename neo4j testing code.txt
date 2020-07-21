@@ -10,7 +10,7 @@ CREATE(Rachel:Person{name:'Rachel Tan', born:1988, location:'Punggol'})
 CREATE(Venice:Person{name:'Venice Foo', born:1998, location:'Sengkang'})
 CREATE(Cally:Person{name:'Cally Goh', born:1980, location: 'Choa Chu Kang'})
 CREATE(Henderson:Person{name:'Henderson Holland', born:1995, location:'Punggol'})
-CREATE(Kenneth:Person{name:'Kenneth Riddle',born:'1977',location:'Sengkang'})
+CREATE(Kenneth:Person{name:'Kenneth Riddle',born:1977,location:'Sengkang'})
 
 # Creating 20 Article nodes
 CREATE(Article1:Article{name:'Article1',location:'Punggol',year:2016})
@@ -139,6 +139,7 @@ CALL gds.nodeSimilarity.write('testing-graph', {writeRelationshipType: 'SIMILAR'
 # To compare nodes based on features like locations, need to add them as nodes + relationships
 # For age, the weight of the relationship can be set to the numeric age to preserve the relativity / categorise the ages into bins (e.g. in bins of 10 years)
 # To calculate similarity score based on multiple relationship types: https://community.neo4j.com/t/how-to-find-the-similarity-between-common-nodes-of-multiple-type-nodes/14321/6
+# Tried below
 
 # For now, continuing with current similarity scores, recommend an article to Tom Cruise.
 
@@ -160,40 +161,19 @@ CREATE (Pun:Location{name:'Punggol'})
 CREATE (Sen:Location{name:'Sengkang'})
 
 # Creating relationships between Person nodes and Location nodes
-MATCH (ben:Person {name:"Benjamin Teo"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+MATCH (ben:Person {name:"Benjamin Teo"}), (tom:Person {name: "Tom Cruise"}),  (choa:Location{name:"Choa Chu Kang"}), (sam:Person {name:"Sam Tan"}), (aaron:Person {name:"Aaron Choo"}), (ger:Person {name:"Gerald Goh"}), (james:Person {name:"James Ho"}), (fred:Person {name:"Fred Ow"}), (rach:Person {name:"Rachel Tan"}), (ven:Person {name:"Venice Foo"}), (cal:Person {name:"Cally Goh"}), (hen:Person {name:"Henderson Holland"}), (ken:Person {name:"Kenneth Riddle"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
+
 CREATE (ben)-[:LOCATED]->(choa)
-
-MATCH (tom:Person {name: "Tom Cruise"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (tom)-[:LOCATED]->(sen)
-
-MATCH (sam:Person {name:"Sam Tan"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (sam)-[:LOCATED]->(choa)
-
-MATCH (aaron:Person {name:"Aaron Choo"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (aaron)-[:LOCATED]->(pun)
-
-MATCH (ger:Person {name:"Gerald Goh"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (ger)-[:LOCATED]->(pun)
-
-MATCH (james:Person {name:"James Ho"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (james)-[:LOCATED]->(sen)
-
-MATCH (fred:Person {name:"Fred Ow"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (fred)-[:LOCATED]->(choa)
-
-MATCH (rach:Person {name:"Rachel Tan"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (rach)-[:LOCATED]->(pun)
-
-MATCH (ven:Person {name:"Venice Foo"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (ven)-[:LOCATED]->(sen)
-
-MATCH (cal:Person {name:"Cally Goh"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (cal)-[:LOCATED]->(choa)
-
-MATCH (hen:Person {name:"Henderson Holland"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (hen)-[:LOCATED]->(pun)
-
-MATCH (ken:Person {name:"Kenneth Riddle"}), (choa:Location{name:"Choa Chu Kang"}), (pun:Location{name:"Punggol"}), (sen:Location{name:"Sengkang"})
 CREATE (ken)-[:LOCATED]->(sen)
 
 # Create graph using a Cypher projection
@@ -243,5 +223,37 @@ CALL gds.graph.create.cypher('testing-graph-2', 'MATCH(n) WHERE n:Person OR n:Ar
 # Determines node similarity based on location, articles liked and the timestamp property of the LIKED relationships
 # If 2 users liked the article in a similar time frame, they will be considered more similar than users who liked the article in different years (smaller the diff in years, greater the similarity)
 CALL gds.nodeSimilarity.stream('testing-graph-2', { relationshipWeightProperty: 'timestamp' })
+YIELD node1, node2, similarity
+RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name AS Person2, similarity
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Say to compare nodes by Age, Location, Articles Liked
+# Create the general Age node
+CREATE (Age:Age)
+
+# Creating relationships between Person nodes and Age node, with their age as a property of the relationship
+MATCH (ben:Person {name:"Benjamin Teo"}), (tom:Person {name: "Tom Cruise"}),  (choa:Location{name:"Choa Chu Kang"}), (sam:Person {name:"Sam Tan"}), (aaron:Person {name:"Aaron Choo"}), (ger:Person {name:"Gerald Goh"}), (james:Person {name:"James Ho"}), (fred:Person {name:"Fred Ow"}), (rach:Person {name:"Rachel Tan"}), (ven:Person {name:"Venice Foo"}), (cal:Person {name:"Cally Goh"}), (hen:Person {name:"Henderson Holland"}), (ken:Person {name:"Kenneth Riddle"}), (age:Age)
+
+CREATE (ben)-[:AGED{age:2020-ben.born}]->(age)
+CREATE (tom)-[:AGED{age:2020-tom.born}]->(age)
+CREATE (sam)-[:AGED{age:2020-sam.born}]->(age)
+CREATE (aaron)-[:AGED{age:2020-aaron.born}]->(age)
+CREATE (ger)-[:AGED{age:2020-ger.born}]->(age)
+CREATE (james)-[:AGED{age:2020-james.born}]->(age)
+CREATE (fred)-[:AGED{age:2020-fred.born}]->(age)
+CREATE (rach)-[:AGED{age:2020-rach.born}]->(age)
+CREATE (ven)-[:AGED{age:2020-ven.born}]->(age)
+CREATE (cal)-[:AGED{age:2020-cal.born}]->(age)
+CREATE (hen)-[:AGED{age:2020-hen.born}]->(age)
+CREATE (ken)-[:AGED{age:2020-ken.born}]->(age)
+
+# Create graph using a Cypher projection
+CALL gds.graph.create.cypher('testing-graph-3', 'MATCH(n) WHERE n:Person OR n:Article OR n:Location OR n:Age RETURN id(n) AS id', 'MATCH (s:Person)-[r:LIKED|LOCATED|AGED]->(t) RETURN id(s) AS source, id(t) AS target, coalesce(r.age, 1.0) AS age') YIELD graphName, nodeCount, relationshipCount, createMillis
+
+# Note that the value of relationshipWeightProperty must be a string -- cannot be an array of properties
+# The following code compares each Person node with every other Person node once because every Person node has a common neighbour -- the Age node.
+# The age difference is also taken into account when calculating the nodes similarity.
+CALL gds.nodeSimilarity.stream('testing-graph-3', { relationshipWeightProperty:'age' })
 YIELD node1, node2, similarity
 RETURN gds.util.asNode(node1).name AS Person1, gds.util.asNode(node2).name AS Person2, similarity
