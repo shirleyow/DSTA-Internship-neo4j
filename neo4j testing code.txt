@@ -213,7 +213,7 @@ RETURN a2 AS Article, avg(r.score) AS AverageScore ORDER BY AverageScore DESC
 MATCH (tom:Person{name:"Tom Cruise"})-[r:`SIMILAR-1`]->(p)
 WITH tom,p,r
 MATCH (p)-[r2:LIKED]->(a2) WHERE NOT (tom)-[:LIKED]->(a2)
-RETURN a2 AS Article, avg(r.score) AS AverageScore, avg(r2.timestamp) AS AverageTime ORDER BY AverageScore, AverageTime DESC
+RETURN a2 AS Document, avg(r.score) AS AverageScore, avg(r2.timestamp) AS AverageTime ORDER BY AverageScore DESC, AverageTime DESC
 
 # Try the weighted graph
 # Create a graph using Cypher projection with relationship property included this time
